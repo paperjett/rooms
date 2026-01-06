@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String?
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
+model Room {
+  id          String    @id @default(cuid())
+  number      String    @unique
+  name        String
+  capacity    Int
+  equipment   String[]
+  status      RoomStatus @default(AVAILABLE)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+  reserveBookings Booking[] @relation("reserveRoom")
+}
+
+model Booking {
+  id          String    @id @default(cuid())
+
+  // Основная информация
+  title       String
+  eventType   String
+  subject     String?
+  format      String?
+  description String?
+
+  // Дата и время
+  startDate   DateTime
+  endDate     DateTime?
+  startTime   DateTime
+  endTime     DateTime
+  cleanupTime Int?
+  setupTime   Int?
+
+  // Аудитория
+  roomId      String
+  room        Room      @relation(fields: [roomId], references: [id])
+  backupRoomId String?
+  reserveRoom  Room?     @relation("reserveRoom", fields: [backupRoomId], references: [id])
+
+  // Организатор
+  organizerEmail     String
+  organizerPhone     String?
+  organizerPosition  String?
+  organizerName      String
+  organizerDepartment String?
+  organizerFaculty   String?
+
+  // Участники
+  expectedParticipants Int
+  participantType      String?
+  specialRequirements  String?
+
+  // Оборудование и требования
+  equipmentNeeded    String[]
+  additionalComments String?
+
+  // Системные поля
+  status      BookingStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  userId      String?
+  user        User?         @relation(fields: [userId], references: [id])
+}
+
+// Enums для статусов
+enum RoomStatus {
+  AVAILABLE
+  BOOKED
+  MAINTENANCE
+  UNAVAILABLE
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  REJECTED
+}

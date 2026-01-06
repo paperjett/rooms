@@ -1,0 +1,38 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.primary {
+    background: var(--color-primary, #3b82f6);
+    color: #fff;
+}
+.secondary {
+    background: #eee;
+    color: #222;
+}
+
+.third {
+    background: #ffedd5;
+    color: #f59e0c;
+}
+
+.sm { font-size: 12px; }
+.md { font-size: 14px; }
+.lg { font-size: 16px; }
+
+.disabled {
+    opacity: .6;
+    pointer-events: none;
+}
+
+.startIcon {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 0.5em;
+}
