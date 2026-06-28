@@ -43,25 +43,25 @@ export type BookingDto = {
 export type BookingCreateDto = Omit<BookingDto, "id" | "room">;
 
 export async function fetchActiveBookings() {
-    const { data } = await http.get<BookingDto[]>("/bookings", { params: { active: "true" } });
+    const { data } = await http.get<BookingDto[]>("/api/bookings", { params: { active: "true" } });
     return data;
 }
 
 export async function fetchBookingById(id: string) {
-    const { data } = await http.get<BookingDto>(`/bookings/${id}`);
+    const { data } = await http.get<BookingDto>(`/api/bookings/${id}`);
     return data;
 }
 
 export async function createBooking(payload: BookingCreateDto) {
-    const { data } = await http.post<{ id: string }>("/bookings", payload);
+    const { data } = await http.post<{ id: string }>("/api/bookings", payload);
     return data;
 }
 
 export async function updateBooking(id: string, payload: Partial<BookingCreateDto>) {
-    const { data } = await http.patch<{ id: string }>(`/bookings/${id}`, payload);
+    const { data } = await http.patch<{ id: string }>(`/api/bookings/${id}`, payload);
     return data;
 }
 
 export async function deleteBooking(id: string) {
-    await http.delete(`/bookings/${id}`);
+    await http.delete(`/api/bookings/${id}`);
 }
